@@ -111,7 +111,7 @@ export default function QRCodeForm() {
     const data = {
       title: formState.title,
       productId: formState.productId || "",
-      productVariantId: formState.productVariantId || "",
+      productVariantId: formState.partialProductVariantId || "",
       productHandle: formState.productHandle || "",
       destination: formState.destination,
     };
