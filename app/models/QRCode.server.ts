@@ -3,7 +3,7 @@ import invariant from "tiny-invariant";
 import db from "../db.server";
 import { QRCode } from "@prisma/client";
 
-interface QRCodeSupplemented extends QRCode {
+export interface QRCodeSupplemented extends QRCode {
     productDeleted?: boolean;
     productTitle?: string;
     productImage?: string;
@@ -12,7 +12,7 @@ interface QRCodeSupplemented extends QRCode {
     image?: string;
   }
 
-interface Product {
+export interface Product {
   title?: string;
   images?: {
     nodes: {
@@ -64,7 +64,7 @@ export async function getQRCode(id: number, graphql: (query: string, variables: 
     if (qrCode.destination === "product") {
       return `https://${qrCode.shop}/products/${qrCode.productHandle}`;
     }
-  
+    console.log("qrCode.productVariantId ", qrCode.productVariantId)
     const match = /gid:\/\/shopify\/ProductVariant\/([0-9]+)/.exec(qrCode.productVariantId);
     invariant(match, "Unrecognized product variant ID");
   
@@ -73,7 +73,7 @@ export async function getQRCode(id: number, graphql: (query: string, variables: 
   
   async function supplementQRCode(qrCode: QRCode, graphql: (query: string, variables: object) => Promise<Response>): Promise<QRCodeSupplemented> {
     const qrCodeImagePromise = getQRCodeImage(qrCode.id);
-  
+    console.log("qrCode.productId", qrCode.productId)
     const response = await graphql(
       `
         query supplementQRCode($id: ID!) {
@@ -89,10 +89,11 @@ export async function getQRCode(id: number, graphql: (query: string, variables: 
         }
       `,
       {
-        id: qrCode.productId,
+        variables: {
+          'id': qrCode.productId,
+        }
       }
     );
-  
     const { data: { product } } = await response.json() as GraphQLResponse;
   
     return {

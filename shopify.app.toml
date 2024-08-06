@@ -3,7 +3,7 @@
 client_id = "a116665b83dfa1bf89ff2fa788b77848"
 name = "order-cancel-app"
 handle = "order-cancel-app"
-application_url = "https://morning-wax-indie-ontario.trycloudflare.com"
+application_url = "https://coal-motherboard-rose-affects.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://morning-wax-indie-ontario.trycloudflare.com/auth/callback",
-  "https://morning-wax-indie-ontario.trycloudflare.com/auth/shopify/callback",
-  "https://morning-wax-indie-ontario.trycloudflare.com/api/auth/callback"
+  "https://coal-motherboard-rose-affects.trycloudflare.com/auth/callback",
+  "https://coal-motherboard-rose-affects.trycloudflare.com/auth/shopify/callback",
+  "https://coal-motherboard-rose-affects.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -27,7 +27,7 @@ api_version = "2024-07"
 
   [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
-  uri = "/webhooks"
+  uri = "https://morning-wax-indie-ontario.trycloudflare.com/webhooks"
 
 [pos]
 embedded = false
