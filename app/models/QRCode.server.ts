@@ -73,7 +73,7 @@ export async function getQRCode(id: number, graphql: (query: string, variables: 
   
   async function supplementQRCode(qrCode: QRCode, graphql: (query: string, variables: object) => Promise<Response>): Promise<QRCodeSupplemented> {
     const qrCodeImagePromise = getQRCodeImage(qrCode.id);
-    console.log("qrCode.productId", qrCode.productId)
+    
     const response = await graphql(
       `
         query supplementQRCode($id: ID!) {

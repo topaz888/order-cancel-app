@@ -15,7 +15,6 @@ import {
 
 import { getQRCodes, QRCodeSupplemented } from "../models/QRCode.server";
 import { AlertDiamondIcon, ImageIcon } from "@shopify/polaris-icons";
-import { QRCode } from "@prisma/client";
 
 export async function loader({ request }: { request: Request }) {
   const { admin, session } = await authenticate.admin(request);
