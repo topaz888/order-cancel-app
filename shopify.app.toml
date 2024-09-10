@@ -3,7 +3,7 @@
 client_id = "a116665b83dfa1bf89ff2fa788b77848"
 name = "order-cancel-app"
 handle = "order-cancel-app"
-application_url = "https://objects-wilderness-destroy-engineers.trycloudflare.com"
+application_url = "https://buying-makers-often-part.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_assigned_fulfillment_orders,read_customers,read_orders,write_assi
 
 [auth]
 redirect_urls = [
-  "https://objects-wilderness-destroy-engineers.trycloudflare.com/auth/callback",
-  "https://objects-wilderness-destroy-engineers.trycloudflare.com/auth/shopify/callback",
-  "https://objects-wilderness-destroy-engineers.trycloudflare.com/api/auth/callback"
+  "https://buying-makers-often-part.trycloudflare.com/auth/callback",
+  "https://buying-makers-often-part.trycloudflare.com/auth/shopify/callback",
+  "https://buying-makers-often-part.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
