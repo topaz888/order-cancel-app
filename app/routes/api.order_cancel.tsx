@@ -10,7 +10,6 @@ import {
   import { Form, useLoaderData } from "@remix-run/react";
   
   async function orderEditBegin(orderId: string, graphql: (query: string, variables: object) => Promise<Response>) {
-    console.log(orderId)
     const response = await graphql(
       `
         mutation orderEditBegin($id: ID!) {
@@ -39,11 +38,9 @@ import {
       }
     );
     const { data: { orderEditBegin: {calculatedOrder, userErrors} } } = await response.json();
-
-    if (userErrors) {
+    if (userErrors.length) {
       throw new Error(`GraphQL error: ${userErrors.map((e: any) => e.message).join(", ")}`);
     }
-
     return {
       calculatedOrderId: calculatedOrder?.id,
     };
@@ -84,7 +81,7 @@ import {
     );
     const { data: { orderEditCommit: { userErrors, order } } } = await response.json();
 
-    if (userErrors) {
+    if (userErrors.length) {
       throw new Error(`GraphQL error: ${userErrors.map((e: any) => e.message).join(", ")}`);
     }
   
@@ -131,7 +128,7 @@ import {
     );
     const { data: {orderEditSetQuantity: { userErrors, calculatedOrder }}} = await response.json();
 
-    if (userErrors) {
+    if (userErrors.length) {
       throw new Error(`GraphQL error: ${userErrors.map((e: any) => e.message).join(", ")}`);
     }
   
@@ -145,11 +142,11 @@ import {
   };
 
   export const action: ActionFunction = async ({ request }) => {
+    // console.log("action")
     const { admin } = await authenticate.public.appProxy(request);
     const formData = await request.formData();
     const orderId = formData.get("orderId");
     const lineItemId = formData.get("lineItemId");
-
     if (!admin || !admin.graphql) {
       throw new Error("GraphQL client not available.");
     }
@@ -164,7 +161,6 @@ import {
     if (typeof lineItemId !== "string") {
       throw new Error("Invalid order ID");
     }
-  
     try {
       // Initialize the order edit
       const calculatedOrder = await orderEditBegin(orderId, admin.graphql);
@@ -175,9 +171,8 @@ import {
       // Commit the order edit
       await orderEditCommit(calculatedOrder.calculatedOrderId, admin.graphql);
   
-      return redirect(`/orders/${orderId}/success`);
+      return json({ success: `${orderId} cancelled` }, { status: 200 });
     } catch (error) {
-      console.error("Error cancelling order:", error); // Log the error to the console
       return json({ error: "Error cancelling order" }, { status: 500 });
     }
   };

@@ -1,0 +1,20 @@
+{% if template contains 'customers/order'  %}
+  <!--ORDER CANCEL START-->
+  {%- for line_item in order.line_items -%}
+    <orderEditor data-order-number="{{ order.id }}" data-order-item="{{ line_item.key }}"></orderEditor>
+  {% endfor %}
+  <script>
+  console.log("test")
+  </script>
+  <!--ORDER CANCEL END-->
+{% endif %}
+
+{% schema %}
+{
+  "name": "app-embed",
+  "target": "body",
+  "stylesheet": "image-gallery.css",
+  "javascript": "party-button.js",
+  "settings": []
+}
+{% endschema %}

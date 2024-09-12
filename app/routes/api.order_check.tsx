@@ -61,7 +61,7 @@ import {
 
       const order = await getOrder(admin?.graphql, orderid);
       const response = order.lineItems.edges.map((edge: { node: { id: any; unfulfilledQuantity: any; } }) => ({
-        id: edge.node.id,
+        id: edge.node.id.replace(/[^\d.-]/g, ''),
         unfulfillable_quantity: edge.node.unfulfilledQuantity,
       }));
 

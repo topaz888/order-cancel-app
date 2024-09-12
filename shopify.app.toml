@@ -1,9 +1,9 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "a116665b83dfa1bf89ff2fa788b77848"
-name = "order-cancel-app"
-handle = "order-cancel-app"
-application_url = "https://contribute-temple-jurisdiction-premium.trycloudflare.com"
+client_id = "14046289f23913234d84ce5b5e2b2d33"
+name = "Order Editor"
+handle = "order-editor-3"
+application_url = "https://ea-dos-kentucky-supporters.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,10 +17,18 @@ scopes = "read_assigned_fulfillment_orders,read_customers,read_orders,write_assi
 
 [auth]
 redirect_urls = [
-  "https://contribute-temple-jurisdiction-premium.trycloudflare.com/auth/callback",
-  "https://contribute-temple-jurisdiction-premium.trycloudflare.com/auth/shopify/callback",
-  "https://contribute-temple-jurisdiction-premium.trycloudflare.com/api/auth/callback"
+  "https://ea-dos-kentucky-supporters.trycloudflare.com/auth/callback",
+  "https://ea-dos-kentucky-supporters.trycloudflare.com/auth/shopify/callback",
+  "https://ea-dos-kentucky-supporters.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
 api_version = "2024-07"
+
+[app_proxy]
+url = "https://ea-dos-kentucky-supporters.trycloudflare.com"
+subpath = "orders"
+prefix = "apps"
+
+[pos]
+embedded = true
