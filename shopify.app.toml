@@ -3,7 +3,7 @@
 client_id = "a116665b83dfa1bf89ff2fa788b77848"
 name = "order-cancel-app"
 handle = "order-cancel-app"
-application_url = "https://coal-motherboard-rose-affects.trycloudflare.com"
+application_url = "https://doubt-mood-england-nearest.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,13 +13,13 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products"
+scopes = "read_assigned_fulfillment_orders,read_customers,read_orders,write_assigned_fulfillment_orders,write_order_edits,write_orders,write_products"
 
 [auth]
 redirect_urls = [
-  "https://coal-motherboard-rose-affects.trycloudflare.com/auth/callback",
-  "https://coal-motherboard-rose-affects.trycloudflare.com/auth/shopify/callback",
-  "https://coal-motherboard-rose-affects.trycloudflare.com/api/auth/callback"
+  "https://doubt-mood-england-nearest.trycloudflare.com/auth/callback",
+  "https://doubt-mood-england-nearest.trycloudflare.com/auth/shopify/callback",
+  "https://doubt-mood-england-nearest.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -28,6 +28,11 @@ api_version = "2024-07"
   [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
   uri = "https://morning-wax-indie-ontario.trycloudflare.com/webhooks"
+
+[app_proxy]
+url = "https://doubt-mood-england-nearest.trycloudflare.com"
+subpath = "orders"
+prefix = "apps"
 
 [pos]
 embedded = false
