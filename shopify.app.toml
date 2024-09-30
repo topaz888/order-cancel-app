@@ -3,7 +3,7 @@
 client_id = "14046289f23913234d84ce5b5e2b2d33"
 name = "Order Editor"
 handle = "order-editor-3"
-application_url = "https://ea-dos-kentucky-supporters.trycloudflare.com"
+application_url = "https://chapel-warcraft-nelson-gb.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,16 +17,16 @@ scopes = "read_assigned_fulfillment_orders,read_customers,read_orders,write_assi
 
 [auth]
 redirect_urls = [
-  "https://ea-dos-kentucky-supporters.trycloudflare.com/auth/callback",
-  "https://ea-dos-kentucky-supporters.trycloudflare.com/auth/shopify/callback",
-  "https://ea-dos-kentucky-supporters.trycloudflare.com/api/auth/callback"
+  "https://chapel-warcraft-nelson-gb.trycloudflare.com/auth/callback",
+  "https://chapel-warcraft-nelson-gb.trycloudflare.com/auth/shopify/callback",
+  "https://chapel-warcraft-nelson-gb.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
 api_version = "2024-07"
 
 [app_proxy]
-url = "https://ea-dos-kentucky-supporters.trycloudflare.com"
+url = "https://chapel-warcraft-nelson-gb.trycloudflare.com"
 subpath = "orders"
 prefix = "apps"
 

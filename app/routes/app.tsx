@@ -25,8 +25,8 @@ export default function App() {
         <Link to="/" rel="home">start</Link>
         <Link to="/app" rel="QRcode">QRcode</Link>
         <Link to="/app/additional">Additional page</Link>
-        <Link to="/app/twoaddition">twoaddition page</Link>
         <Link to="/app/order">Order page</Link>
+        <Link to="/app/settings">Settings page</Link>
       </NavMenu>
       <Outlet />
     </AppProvider>
