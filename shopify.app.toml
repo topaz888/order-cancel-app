@@ -1,14 +1,14 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "14046289f23913234d84ce5b5e2b2d33"
-name = "Order Editor"
-handle = "order-editor-3"
-application_url = "https://chapel-warcraft-nelson-gb.trycloudflare.com"
+client_id = "c044f0dc05f65ac1590d2f5b83251cf6"
+name = "order-cancel-app"
+handle = "order-cancel-app-2"
+application_url = "https://prot-gentle-letter-stevens.trycloudflare.com"
 embedded = true
 
 [build]
 automatically_update_urls_on_dev = true
-dev_store_url = "quickstart-82eb1b1f.myshopify.com"
+dev_store_url = "quickstart-4e8ca8f9.myshopify.com"
 include_config_on_deploy = true
 
 [access_scopes]
@@ -17,18 +17,18 @@ scopes = "read_assigned_fulfillment_orders,read_customers,read_orders,write_assi
 
 [auth]
 redirect_urls = [
-  "https://chapel-warcraft-nelson-gb.trycloudflare.com/auth/callback",
-  "https://chapel-warcraft-nelson-gb.trycloudflare.com/auth/shopify/callback",
-  "https://chapel-warcraft-nelson-gb.trycloudflare.com/api/auth/callback"
+  "https://prot-gentle-letter-stevens.trycloudflare.com/auth/callback",
+  "https://prot-gentle-letter-stevens.trycloudflare.com/auth/shopify/callback",
+  "https://prot-gentle-letter-stevens.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
-api_version = "2024-07"
+api_version = "2024-10"
 
 [app_proxy]
-url = "https://chapel-warcraft-nelson-gb.trycloudflare.com"
+url = "https://prot-gentle-letter-stevens.trycloudflare.com"
 subpath = "orders"
 prefix = "apps"
 
 [pos]
-embedded = true
+embedded = false

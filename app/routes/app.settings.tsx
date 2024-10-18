@@ -1,5 +1,5 @@
-import { ActionFunction, json } from "@remix-run/node";
-import { useFetcher, useSubmit } from "@remix-run/react";
+import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
+import { useFetcher, useLoaderData, useSubmit } from "@remix-run/react";
 import {
   Card,
   Page,
@@ -14,7 +14,7 @@ import {
   Form,
 } from "@shopify/polaris";
 import { useCallback, useState } from "react";
-import { getAppId } from "~/models/appMetafields";
+import { createAppMetafield, getAppId, retrieveMetafield } from "~/models/appMetafields";
 import { authenticate } from "~/shopify.server";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -26,21 +26,30 @@ export const action: ActionFunction = async ({ request }) => {
     shop,
   };
   const appId = await getAppId(admin.graphql);
-  // gid://shopify/AppInstallation/508810821793
-
+  await createAppMetafield(admin.graphql, appId.id, "reasons", data.formState)
+  await retrieveMetafield(admin.graphql, appId.id, "reasons")
   return json({ success: true, message: "Settings saved successfully" });
 };
 
+export const loader: LoaderFunction = async ({ request, params }) => {
+  const { admin } = await authenticate.admin(request);
+  const appId = await getAppId(admin.graphql);
+  // const metafields = await createAppMetafield(admin.graphql, appId.id, "reasons", "test purpose1 test purpose 2")
+  return json(await retrieveMetafield(admin.graphql, appId.id, "reasons"))
+}
+
 export default function OrderSettingsPage() {
-  const [reasons, setReasons] = useState<string[]>(['']);
-  // const [cleanFormState, setCleanFormState] = useState<string[]>(qrCode);
-  // const isDirty = JSON.stringify(reasons) !== JSON.stringify(cleanFormState);
-  const fetcher = useFetcher();
+  const reasons = useLoaderData<typeof loader>();
+  const initialFormState = reasons?.value ? JSON.parse(reasons.value) : [];
+  const [formState, setFormState] = useState<string[]>(initialFormState);
+  const [cleanFormState, setCleanFormState] = useState<string[]>(initialFormState);
+  const isDirty = JSON.stringify(formState) !== JSON.stringify(cleanFormState);
+  // const fetcher = useFetcher();
 
   const handleChangeString = async (newValue: string, index: number) => {
-    const updatedReasons = [...reasons];
+    const updatedReasons = [...formState];
     updatedReasons[index] = newValue;
-    setReasons(updatedReasons)
+    setFormState(updatedReasons)
   };
 
   
@@ -48,15 +57,15 @@ export default function OrderSettingsPage() {
   const handleChangeCheckbox = async(newChecked: boolean) => (setChecked(newChecked));
 
   const handleAddReasons = async () => {
-    setReasons((prevReasons) => ([
+    setFormState((prevReasons) => ([
       ...prevReasons,
       '' 
     ]));
   };
 
   const handleRemoveReasons = async(index: number) => {
-    setReasons((reasons) => 
-      reasons.filter((_, i) => i !== index) // Filter out the item at the specified index
+    setFormState((formState) => 
+      formState.filter((_, i) => i !== index) // Filter out the item at the specified index
     );
   };
 
@@ -64,8 +73,9 @@ export default function OrderSettingsPage() {
   const handleSaveButton = () => {
     const data = {
       reasonRequired: checked.toString(),
-      reasons: reasons,
+      formState: JSON.stringify(formState),
     };
+    setCleanFormState(formState);
     submit(data, { method: "post" });
   };
   
@@ -75,7 +85,7 @@ export default function OrderSettingsPage() {
     plural: 'reasons',
   };
 
-  const rowMarkup = reasons.map(
+  const rowMarkup = formState.map(
     (
       reason,
       index,
@@ -110,7 +120,7 @@ export default function OrderSettingsPage() {
       titleMetadata={<Badge tone="success">Paid</Badge>}
       subtitle="Perfect for any pet"
       compactTitle
-      primaryAction={{content: 'Save', disabled: reasons.length === 0,
+      primaryAction={{content: 'Save', disabled: !isDirty,
         onAction: () => {
           handleSaveButton();
         }}}
@@ -134,7 +144,7 @@ export default function OrderSettingsPage() {
             <IndexTable
               condensed={useBreakpoints().smDown}
               resourceName={resourceName}
-              itemCount={reasons.length}
+              itemCount={formState.length}
               headings={[
                 {title: 'Reasons'},
                 {title: ''},

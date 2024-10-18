@@ -12,11 +12,11 @@ export async function getAppId(graphql: (query: string) => Promise<Response>) {
         `
         );
     const { data: { userErrors, currentAppInstallation } } = await response.json();
-    console.log(currentAppInstallation)
+    // console.log(currentAppInstallation)
     return currentAppInstallation;
 }
 
-export async function createAppMetafield(appId: string, key: string, value: string, graphql: (query: string, variables: object) => Promise<Response>) {
+export async function createAppMetafield(graphql: (query: string, variables: object) => Promise<Response>, appId: string, key?: string, value?: string) {
   const response = await graphql(
    `  
     mutation CreateAppDataMetafield($metafieldsSetInput: [MetafieldsSetInput!]!) {
@@ -25,6 +25,7 @@ export async function createAppMetafield(appId: string, key: string, value: stri
           id
           namespace
           key
+          value
         }
         userErrors {
           field
@@ -47,9 +48,12 @@ export async function createAppMetafield(appId: string, key: string, value: stri
       },
     }
   )
+  const { data: { metafieldsSet:{userErrors, metafields} } } = await response.json();
+  // console.log(metafields)
+  return metafields;
 }
 
-export async function retrieveMetafield(ownerId: string, namespace: string, key: string, graphql: (query: string, variables: object) => Promise<Response>) {
+export async function retrieveMetafield(graphql: (query: string, variables: object) => Promise<Response>, ownerId: string, key: string) {
   const response = await graphql(
     `
     query AppInstallationMetafield($namespace: String!, $key: String!, $ownerId: ID!) {
@@ -61,12 +65,17 @@ export async function retrieveMetafield(ownerId: string, namespace: string, key:
       }
     }
     `,
-    {
-      id: ownerId,
-      namespace:namespace,
-      key:key
+    {      
+      variables: {
+        ownerId: ownerId,
+        namespace: "app_custom",
+        key:key
+      }
     }
-  );
+  )
+  const { data: { appInstallation:{ metafield } } } = await response.json();
+  // console.log(metafield)
+  return metafield;
 }
 
 // export async function updateMetafield(ownerId: string,namespace: string, key: string, graphql: (query: string, variables: object) => Promise<Response>) {
