@@ -1,83 +1,139 @@
+import React, { useState } from 'react';
 import {
-  Box,
-  Card,
-  Layout,
-  Link,
-  List,
   Page,
-  Text,
-  BlockStack,
-} from "@shopify/polaris";
-import { TitleBar } from "@shopify/app-bridge-react";
+  Layout,
+  Card,
+  DataTable,
+  Checkbox,
+  Button,
+  Modal,
+  TextField,
+  ResourceList,
+  ResourceItem
+} from '@shopify/polaris';
 
-export default function AdditionalPage() {
+interface ProductItem {
+  id: string;
+  name: string;
+}
+
+function CancellationSettings() {
+  const [isReasonRequired, setIsReasonRequired] = useState(false);
+  const [reasons, setReasons] = useState<string[]>([]);
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [newReason, setNewReason] = useState<string>('');
+  const [allowedProducts, setAllowedProducts] = useState<ProductItem[]>([]); // type as ProductItem[]
+  const [isProductModalActive, setIsProductModalActive] = useState(false);
+  const [newProduct, setNewProduct] = useState<string>('');
+
+  // Toggle modal for adding reasons
+  const toggleModal = () => setIsModalActive(!isModalActive);
+
+  // Toggle modal for adding products
+  const toggleProductModal = () => setIsProductModalActive(!isProductModalActive);
+
+  // Add new reason to the table
+  const addReason = () => {
+    setReasons([...reasons, newReason]);
+    setNewReason('');
+    toggleModal();
+  };
+
+  // Add new product to the list
+  const addProduct = () => {
+    const newProductItem = { id: Math.random().toString(36).substr(2, 9), name: newProduct }; // creating unique id
+    setAllowedProducts([...allowedProducts, newProductItem]);
+    setNewProduct('');
+    toggleProductModal();
+  };
+
   return (
-    <Page>
-      <TitleBar title="Additional page" />
+    <Page title="Cancellation Settings">
       <Layout>
         <Layout.Section>
+          {/* Reason Selection Required Checkbox */}
           <Card>
-            <BlockStack gap="300">
-              <Text as="p" variant="bodyMd">
-                The app template comes with an additional page which
-                demonstrates how to create multiple pages within app navigation
-                using{" "}
-                <Link
-                  url="https://shopify.dev/docs/apps/tools/app-bridge"
-                  target="_blank"
-                  removeUnderline
-                >
-                  App Bridge
-                </Link>
-                .
-              </Text>
-              <Text as="p" variant="bodyMd">
-                To create your own page and have it show up in the app
-                navigation, add a page inside <Code>app/routes</Code>, and a
-                link to it in the <Code>&lt;NavMenu&gt;</Code> component found
-                in <Code>app/routes/app.jsx</Code>.
-              </Text>
-            </BlockStack>
+            <Checkbox
+              label="Require Cancellation Reason"
+              checked={isReasonRequired}
+              onChange={(newChecked) => setIsReasonRequired(newChecked)}
+            />
           </Card>
-        </Layout.Section>
-        <Layout.Section variant="oneThird">
+
+          {/* Table of Reasons */}
           <Card>
-            <BlockStack gap="200">
-              <Text as="h2" variant="headingMd">
-                Resources
-              </Text>
-              <List>
-                <List.Item>
-                  <Link
-                    url="https://shopify.dev/docs/apps/design-guidelines/navigation#app-nav"
-                    target="_blank"
-                    removeUnderline
-                  >
-                    App nav best practices
-                  </Link>
-                </List.Item>
-              </List>
-            </BlockStack>
+            <DataTable
+              columnContentTypes={['text', 'text']}
+              headings={['Reason', 'Actions']}
+              rows={reasons.map((reason) => [
+                reason,
+                <Button onClick={() => setReasons(reasons.filter((r) => r !== reason))}>Delete</Button>,
+              ])}
+            />
+            <Button onClick={toggleModal} variant='primary'>Add Reason</Button>
+          </Card>
+
+          {/* List of Allowed Products */}
+          <Card>
+            <ResourceList
+              resourceName={{ singular: 'product', plural: 'products' }}
+              items={allowedProducts}
+              renderItem={(product) => (
+                <ResourceItem onClick={()=>{}} id={product.id} accessibilityLabel={`View details for ${product.name}`}>
+                  {product.name}
+                </ResourceItem>
+              )}
+            />
+            <Button onClick={toggleProductModal} variant='primary'>Add Product</Button>
           </Card>
         </Layout.Section>
       </Layout>
+
+      {/* Modal for Adding New Reason */}
+      {isModalActive && (
+        <Modal
+          open={isModalActive}
+          onClose={toggleModal}
+          title="Add a New Reason"
+          primaryAction={{
+            content: 'Add Reason',
+            onAction: addReason,
+          }}
+        >
+          <Modal.Section>
+            <TextField
+              label="Reason"
+              value={newReason}
+              onChange={(value) => setNewReason(value)}
+              autoComplete="off"
+            />
+          </Modal.Section>
+        </Modal>
+      )}
+
+      {/* Modal for Adding New Product */}
+      {isProductModalActive && (
+        <Modal
+          open={isProductModalActive}
+          onClose={toggleProductModal}
+          title="Add a New Product"
+          primaryAction={{
+            content: 'Add Product',
+            onAction: addProduct,
+          }}
+        >
+          <Modal.Section>
+            <TextField
+              label="Product Name or SKU"
+              value={newProduct}
+              onChange={(value) => setNewProduct(value)}
+              autoComplete="off"
+            />
+          </Modal.Section>
+        </Modal>
+      )}
     </Page>
   );
 }
 
-function Code({ children }: { children: React.ReactNode }) {
-  return (
-    <Box
-      as="span"
-      padding="025"
-      paddingInlineStart="100"
-      paddingInlineEnd="100"
-      background="bg-surface-active"
-      borderWidth="025"
-      borderColor="border"
-      borderRadius="100"
-    >
-      <code>{children}</code>
-    </Box>
-  );
-}
+export default CancellationSettings;

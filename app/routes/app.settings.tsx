@@ -9,16 +9,24 @@ import {
   IndexTable,
   useIndexResourceState,
   useBreakpoints,
+  Text,
   TextField,
   Button,
   Form,
+  InlineError,
+  InlineStack,
+  Divider,
+  SkeletonThumbnail,
+  EmptyState,
+  PageActions,
 } from "@shopify/polaris";
 import { useCallback, useState } from "react";
 import { createAppMetafield, getAppId, retrieveMetafield } from "~/models/appMetafields";
 import { authenticate } from "~/shopify.server";
+import emptyStateImage from '../assets/images/productEmptyState.png';
 
 export const action: ActionFunction = async ({ request }) => {
-    const { session, admin } = await authenticate.admin(request);
+  const { session, admin } = await authenticate.admin(request);
   const { shop } = session;
 
   const data : any  = {
@@ -36,6 +44,27 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const appId = await getAppId(admin.graphql);
   // const metafields = await createAppMetafield(admin.graphql, appId.id, "reasons", "test purpose1 test purpose 2")
   return json(await retrieveMetafield(admin.graphql, appId.id, "reasons"))
+}
+
+async function selectProduct() {
+  const products = await window.shopify.resourcePicker({
+    type: "product",
+    action: "select", // customized action verb, either 'select' or 'add',
+  });
+
+  if (products) {
+    const { images, id, variants, title, handle } = products[0];
+    console.log(id);
+    // setFormState({
+    //   ...formState,
+    //   productId: id,
+    //   partialProductVariantId: variants[0].id,
+    //   productTitle: title,
+    //   productHandle: handle,
+    //   productAlt: images[0]?.altText,
+    //   productImage: images[0]?.originalSrc,
+    // });
+  }
 }
 
 export default function OrderSettingsPage() {
@@ -132,7 +161,7 @@ export default function OrderSettingsPage() {
         }
       ]}
     >
-        <Card>
+      <Card>
         <BlockStack gap="500">
             <Checkbox
                 label="Reason selection required"
@@ -146,16 +175,42 @@ export default function OrderSettingsPage() {
               resourceName={resourceName}
               itemCount={formState.length}
               headings={[
-                {title: 'Reasons'},
-                {title: ''},
+                {id: 'reasons', title: 'Reasons'},
+                {id: 'actions', title: ''},
               ]}
               selectable={false}
               >
                 {rowMarkup}
             </IndexTable>
             <Button onClick={() => {handleAddReasons()}}>Add reason</Button>
+            <Divider borderColor="border" />
+            <IndexTable
+              condensed={useBreakpoints().smDown}
+              resourceName={resourceName}
+              itemCount={formState.length}
+              headings={[
+                {title: 'Products'},
+                {title: ''},
+              ]}
+              selectable={false}
+              >
+            </IndexTable>
+            <EmptyState
+              heading="Manage your allowed Products"
+              action={{onAction: selectProduct, content: 'Select product'}}
+              image={emptyStateImage}
+            >
+              <p>Specify the items eligible for cancellation</p>
+            </EmptyState>
+            {true ? (
+              <InlineError
+                message={"error"}
+                fieldID="myFieldID"
+              />
+            ) : null}
           </BlockStack>
-        </Card>
+      </Card>
+      <PageActions/>
     </Page>
   );
 }

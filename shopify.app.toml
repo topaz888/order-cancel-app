@@ -3,7 +3,7 @@
 client_id = "c044f0dc05f65ac1590d2f5b83251cf6"
 name = "order-cancel-app"
 handle = "order-cancel-app-2"
-application_url = "https://prot-gentle-letter-stevens.trycloudflare.com"
+application_url = "https://skin-gpl-prescription-expense.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,16 +17,16 @@ scopes = "read_assigned_fulfillment_orders,read_customers,read_orders,write_assi
 
 [auth]
 redirect_urls = [
-  "https://prot-gentle-letter-stevens.trycloudflare.com/auth/callback",
-  "https://prot-gentle-letter-stevens.trycloudflare.com/auth/shopify/callback",
-  "https://prot-gentle-letter-stevens.trycloudflare.com/api/auth/callback"
+  "https://skin-gpl-prescription-expense.trycloudflare.com/auth/callback",
+  "https://skin-gpl-prescription-expense.trycloudflare.com/auth/shopify/callback",
+  "https://skin-gpl-prescription-expense.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
 api_version = "2024-10"
 
 [app_proxy]
-url = "https://prot-gentle-letter-stevens.trycloudflare.com"
+url = "https://skin-gpl-prescription-expense.trycloudflare.com"
 subpath = "orders"
 prefix = "apps"
 

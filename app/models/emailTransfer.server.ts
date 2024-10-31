@@ -4,25 +4,27 @@ import { json } from "@remix-run/node";
 import nodemailer from "nodemailer";
 
 // Server-side action for the form submission
-export async function sendEmail(receiver: string, message: string) {
+export async function sendEmail(title: string, receiver: string, message: string) {
 
   // Configure the email transporter
   let transporter = nodemailer.createTransport({
-    host: "smtp.example.com", // Replace with your SMTP provider
+    host: "smtp-relay.brevo.com", // Replace with your SMTP provider
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
-      user: process.env.EMAIL_USER, // Your email address
-      pass: process.env.EMAIL_PASS, // Your email password
+      // user: process.env.EMAIL_USER, // Your email address
+      // pass: process.env.EMAIL_PASS, // Your email password
+      user: "7e6037001@smtp-brevo.com",
+      pass: "xsmtpsib-25111f453db44a155701741974b8744161e6d156ff3e53515e5fa354183e90bb-5zy4CSKd216EBXLR",
     },
   });
 
   // Define the email options
   let mailOptions = {
-    from: '"Shopify App" <no-reply@example.com>',
-    to: receiver,
-    subject: "Thank you for reaching out!",
-    text: message, // plain text body
+    from: receiver,
+    to: "manoroldoak@gmail.com",
+    subject: JSON.parse(title),
+    text: JSON.parse(message), // plain text body
   };
 
   try {
