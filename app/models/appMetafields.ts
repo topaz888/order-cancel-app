@@ -16,7 +16,7 @@ export async function getAppId(graphql: (query: string) => Promise<Response>) {
     return currentAppInstallation;
 }
 
-export async function createAppMetafield(graphql: (query: string, variables: object) => Promise<Response>, appId: string, key?: string, value?: string) {
+export async function createAppMetafield(graphql: (query: string, variables: object) => Promise<Response>, appId: string, key: string, value: string, type:string) {
   const response = await graphql(
    `  
     mutation CreateAppDataMetafield($metafieldsSetInput: [MetafieldsSetInput!]!) {
@@ -40,7 +40,7 @@ export async function createAppMetafield(graphql: (query: string, variables: obj
           {
             namespace: "app_custom",
             key: key,
-            type: "single_line_text_field",
+            type: type,
             value: value,
             ownerId: appId
           }
